@@ -129,8 +129,5 @@ async def main() -> None:
     await application.run_polling()
 
 if __name__ == '__main__':
-    # Obtain the current event loop
-    loop = asyncio.get_event_loop()
-    
-    # Run the main function in the event loop
-    loop.run_until_complete(main())
+    # Run the async main function
+    asyncio.run(main())
