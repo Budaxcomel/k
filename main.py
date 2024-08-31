@@ -5,7 +5,7 @@ import re
 
 TOKEN = '7409687169:AAHYmbd5UwNLwzZQVnAKaUwCcue_7ddLarY'
 
-def start(update: Update, context: CallbackContext) -> None:
+async def start(update: Update, context: CallbackContext) -> None:
     keyboard = [
         [InlineKeyboardButton("Digi", callback_data='digi')],
         [InlineKeyboardButton("Maxis", callback_data='maxis')],
@@ -16,11 +16,11 @@ def start(update: Update, context: CallbackContext) -> None:
         [InlineKeyboardButton("Booster 5", callback_data='booster5')]
     ]
     reply_markup = InlineKeyboardMarkup(keyboard)
-    update.message.reply_text('Pilih pilihan:', reply_markup=reply_markup)
+    await update.message.reply_text('Pilih pilihan:', reply_markup=reply_markup)
 
-def button(update: Update, context: CallbackContext) -> None:
+async def button(update: Update, context: CallbackContext) -> None:
     query = update.callback_query
-    query.answer()
+    await query.answer()
 
     if query.data == 'digi':
         keyboard = [
@@ -28,34 +28,34 @@ def button(update: Update, context: CallbackContext) -> None:
             [InlineKeyboardButton("Digi X Langgan", callback_data='digi_x_langgan')]
         ]
         reply_markup = InlineKeyboardMarkup(keyboard)
-        query.edit_message_text(text="Pilih submenu Digi:", reply_markup=reply_markup)
+        await query.edit_message_text(text="Pilih submenu Digi:", reply_markup=reply_markup)
     elif query.data == 'maxis':
         keyboard = [
             [InlineKeyboardButton("my.budaxcomel.me", callback_data='maxis_my')],
             [InlineKeyboardButton("sg.budaxcomel.me", callback_data='maxis_sg')]
         ]
         reply_markup = InlineKeyboardMarkup(keyboard)
-        query.edit_message_text(text="Pilih submenu Maxis:", reply_markup=reply_markup)
+        await query.edit_message_text(text="Pilih submenu Maxis:", reply_markup=reply_markup)
     elif query.data == 'booster5':
         keyboard = [
             [InlineKeyboardButton("Method 1", callback_data='booster5_method1')],
             [InlineKeyboardButton("Method 2", callback_data='booster5_method2')]
         ]
         reply_markup = InlineKeyboardMarkup(keyboard)
-        query.edit_message_text(text="Pilih submenu Booster 5:", reply_markup=reply_markup)
+        await query.edit_message_text(text="Pilih submenu Booster 5:", reply_markup=reply_markup)
     else:
         context.user_data['menu'] = query.data
-        query.edit_message_text(text="Sila hantar teks yang ingin ditukar:")
+        await query.edit_message_text(text="Sila hantar teks yang ingin ditukar:")
 
-def handle_message(update: Update, context: CallbackContext) -> None:
+async def handle_message(update: Update, context: CallbackContext) -> None:
     user_text = update.message.text
     menu = context.user_data.get('menu')
 
     if menu:
         response = process_text(user_text, menu)
-        update.message.reply_text(response)
+        await update.message.reply_text(response)
     else:
-        update.message.reply_text("Sila pilih menu terlebih dahulu menggunakan butang.")
+        await update.message.reply_text("Sila pilih menu terlebih dahulu menggunakan butang.")
 
 def process_text(user_text: str, menu: str) -> str:
     result = user_text
@@ -104,14 +104,15 @@ def process_text(user_text: str, menu: str) -> str:
 
     return result
 
-def main() -> None:
-    application = Application.builder().token(TOKEN).build()  # Use Application instead of Updater
+async def main() -> None:
+    application = Application.builder().token(TOKEN).build()
 
     application.add_handler(CommandHandler('start', start))
     application.add_handler(CallbackQueryHandler(button))
     application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
 
-    application.run_polling()
+    await application.run_polling()
 
 if __name__ == '__main__':
-    main()
+    import asyncio
+    asyncio.run(main())
