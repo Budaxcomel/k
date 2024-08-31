@@ -1,5 +1,6 @@
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import Updater, CommandHandler, CallbackQueryHandler, MessageHandler, filters, CallbackContext
+from queue import Queue  # Import Queue to provide it to the Updater
 import re
 
 TOKEN = '7409687169:AAHYmbd5UwNLwzZQVnAKaUwCcue_7ddLarY'
@@ -104,7 +105,8 @@ def process_text(user_text: str, menu: str) -> str:
     return result
 
 def main() -> None:
-    updater = Updater(TOKEN)
+    update_queue = Queue()  # Create an instance of Queue
+    updater = Updater(TOKEN, update_queue=update_queue)  # Pass the Queue to Updater
 
     dispatcher = updater.dispatcher
 
