@@ -15,6 +15,7 @@ git clone https://github.com/yourusername/telegram-bot-project.git
 cd telegram-bot-project
 
 ### 2. Set Up Your Virtual Environment
+
 Create a virtual environment to keep your dependencies organized:
 
 ```
@@ -22,6 +23,7 @@ python -m venv venv
 source venv/bin/activate   # For Windows users: `venv\Scripts\activate`
 
 ### 3. Install Required Packages
+
 Install all the necessary packages listed in requirements.txt:
 
 ```
@@ -30,38 +32,36 @@ pip install -r requirements.txt
 ---
 
 ### 4. Configure Your Bot
+
 Create a .env file in the project root and add your Telegram bot token:
 
 ```
 TELEGRAM_BOT_TOKEN=your_telegram_bot_token_here
 
----
-
 ###🏃‍♂️ Running the Bot
+
 To start your bot, simply run:
 
 ```
 python main.py
 
----
-
 Your bot will now be live and ready to interact with users!
 
 ### 🧪 Testing Your Bot
+
 If you want to test your bot or add new features, you can run tests using pytest:
 
 ```
 pytest
 
 ### 🐳 Docker Support (Optional)
+
 If you're using Docker, you can build and run the bot in a container:
 
 Build the Docker Image
 
 ```
 docker build -t telegram-bot .
-
----
 
 Run the Docker Container
 
