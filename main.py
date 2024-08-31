@@ -1,6 +1,6 @@
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
-from telegram.ext import Updater, CommandHandler, CallbackQueryHandler, MessageHandler, filters, CallbackContext
-from queue import Queue  # Import Queue to provide it to the Updater
+from telegram.ext import Application, CommandHandler, CallbackQueryHandler, MessageHandler, filters, CallbackContext
+from queue import Queue
 import re
 
 TOKEN = '7409687169:AAHYmbd5UwNLwzZQVnAKaUwCcue_7ddLarY'
@@ -105,17 +105,13 @@ def process_text(user_text: str, menu: str) -> str:
     return result
 
 def main() -> None:
-    update_queue = Queue()  # Create an instance of Queue
-    updater = Updater(TOKEN, update_queue=update_queue)  # Pass the Queue to Updater
+    application = Application.builder().token(TOKEN).build()  # Use Application instead of Updater
 
-    dispatcher = updater.dispatcher
+    application.add_handler(CommandHandler('start', start))
+    application.add_handler(CallbackQueryHandler(button))
+    application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
 
-    dispatcher.add_handler(CommandHandler('start', start))
-    dispatcher.add_handler(CallbackQueryHandler(button))
-    dispatcher.add_handler(MessageHandler(filters.text & ~filters.command, handle_message))
-
-    updater.start_polling()
-    updater.idle()
+    application.run_polling()
 
 if __name__ == '__main__':
     main()
