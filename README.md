@@ -14,6 +14,8 @@ Start by cloning the repository to your local machine:
 git clone https://github.com/yourusername/telegram-bot-project.git
 cd telegram-bot-project
 
+---
+
 # 2. **Set Up Your Virtual Environment**
 Create a virtual environment to keep your dependencies organized:
 
