@@ -2,7 +2,7 @@ import sys
 import os
 import asyncio
 from telegram.ext import Application, CommandHandler, CallbackQueryHandler, MessageHandler, filters
-from config import TOKEN
+from config import TOKEN, logger
 from handlers import start, button, handle_message
 
 # Menambah direktori semasa ke Python path
