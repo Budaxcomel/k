@@ -125,8 +125,12 @@ async def main() -> None:
     application.add_handler(CallbackQueryHandler(button))
     application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
 
+    # Start polling
     await application.run_polling()
 
 if __name__ == '__main__':
-    # Use asyncio.run() to manage the event loop
-    asyncio.run(main())
+    # Obtain the current event loop
+    loop = asyncio.get_event_loop()
+    
+    # Run the main function in the event loop
+    loop.run_until_complete(main())
