@@ -11,8 +11,8 @@ Follow these steps to get your bot up and running:
 Start by cloning the repository to your local machine:
 
 ```
-git clone https://github.com/yourusername/telegram-bot-project.git
-cd telegram-bot-project
+git clone https://github.com/Budaxcomel/cnvt.git
+cd cnvt
 ```
 
 ### 2. Set Up Your Virtual Environment
