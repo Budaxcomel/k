@@ -45,10 +45,24 @@ PATTERNS: Patterns = {
 }
 
 def process_text(user_text: str, menu: str) -> str:
+    """
+    Processes the provided text based on the selected menu's patterns.
+
+    Args:
+        user_text (str): The text to be processed.
+        menu (str): The menu key to determine which patterns to apply.
+
+    Returns:
+        str: The processed text with applied replacements.
+    """
     replacements = PATTERNS.get(menu, [])
     result = user_text
 
     for pattern, replacement in replacements:
-        result = re.sub(pattern, replacement, result)
+        try:
+            result = re.sub(pattern, replacement, result)
+        except re.error as e:
+            # Log the regex error if necessary
+            print(f"Regex error for pattern '{pattern}': {e}")
 
     return result

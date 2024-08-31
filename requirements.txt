@@ -2,7 +2,7 @@
 python-telegram-bot==20.0a2
 
 # Library for loading environment variables
-python-dotenv==1.0.0
+python-dotenv==1.0.1
 
 # HTTP requests library (optional)
 requests==2.28.2
