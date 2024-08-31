@@ -10,7 +10,7 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 # Load the token from an environment variable for security
-TOKEN = os.getenv('TELEGRAM_BOT_TOKEN')
+TOKEN = os.getenv('7409687169:AAHYmbd5UwNLwzZQVnAKaUwCcue_7ddLarY')
 
 async def start(update: Update, context: CallbackContext) -> None:
     keyboard = [
