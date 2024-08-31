@@ -16,9 +16,12 @@ async def main() -> None:
     application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
 
     try:
+        await application.initialize()
         await application.run_polling()
     except Exception as e:
         logger.error(f"Error during polling: {e}")
+    finally:
+        await application.shutdown()
 
 if __name__ == '__main__':
     try:
