@@ -40,7 +40,7 @@ Create a .env file in the project root and add your Telegram bot token:
 TELEGRAM_BOT_TOKEN=your_telegram_bot_token_here
 ```
 
-###🏃‍♂️ Running the Bot
+### 🏃‍♂️ Running the Bot
 
 To start your bot, simply run:
 
