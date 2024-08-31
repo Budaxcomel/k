@@ -2,8 +2,15 @@ from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import Application, CommandHandler, CallbackQueryHandler, MessageHandler, filters, CallbackContext
 import asyncio
 import re
+import logging
+import os
 
-TOKEN = '7409687169:AAHYmbd5UwNLwzZQVnAKaUwCcue_7ddLarY'
+# Set up logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+# Load the token from an environment variable for security
+TOKEN = os.getenv('TELEGRAM_BOT_TOKEN')
 
 async def start(update: Update, context: CallbackContext) -> None:
     keyboard = [
@@ -22,27 +29,25 @@ async def button(update: Update, context: CallbackContext) -> None:
     query = update.callback_query
     await query.answer()
 
-    if query.data == 'digi':
-        keyboard = [
+    submenu_options = {
+        'digi': [
             [InlineKeyboardButton("Digi Booster", callback_data='digi_booster')],
             [InlineKeyboardButton("Digi X Langgan", callback_data='digi_x_langgan')]
-        ]
-        reply_markup = InlineKeyboardMarkup(keyboard)
-        await query.edit_message_text(text="Pilih submenu Digi:", reply_markup=reply_markup)
-    elif query.data == 'maxis':
-        keyboard = [
+        ],
+        'maxis': [
             [InlineKeyboardButton("my.budaxcomel.me", callback_data='maxis_my')],
             [InlineKeyboardButton("sg.budaxcomel.me", callback_data='maxis_sg')]
-        ]
-        reply_markup = InlineKeyboardMarkup(keyboard)
-        await query.edit_message_text(text="Pilih submenu Maxis:", reply_markup=reply_markup)
-    elif query.data == 'booster5':
-        keyboard = [
+        ],
+        'booster5': [
             [InlineKeyboardButton("Method 1", callback_data='booster5_method1')],
             [InlineKeyboardButton("Method 2", callback_data='booster5_method2')]
         ]
+    }
+
+    if query.data in submenu_options:
+        keyboard = submenu_options[query.data]
         reply_markup = InlineKeyboardMarkup(keyboard)
-        await query.edit_message_text(text="Pilih submenu Booster 5:", reply_markup=reply_markup)
+        await query.edit_message_text(text=f"Pilih submenu {query.data.capitalize()}:", reply_markup=reply_markup)
     else:
         context.user_data['menu'] = query.data
         await query.edit_message_text(text="Sila hantar teks yang ingin ditukar:")
@@ -52,14 +57,16 @@ async def handle_message(update: Update, context: CallbackContext) -> None:
     menu = context.user_data.get('menu')
 
     if menu:
-        response = process_text(user_text, menu)
-        await update.message.reply_text(response)
+        try:
+            response = process_text(user_text, menu)
+            await update.message.reply_text(response)
+        except Exception as e:
+            logger.error(f"Error processing text: {e}")
+            await update.message.reply_text("Terjadi ralat semasa memproses teks.")
     else:
         await update.message.reply_text("Sila pilih menu terlebih dahulu menggunakan butang.")
 
 def process_text(user_text: str, menu: str) -> str:
-    result = user_text
-
     patterns = {
         'digi_booster': [
             (r'@(\S+):(\d+)', '@162.159.134.61:\2'),
@@ -99,7 +106,10 @@ def process_text(user_text: str, menu: str) -> str:
         ]
     }
 
-    for pattern, replacement in patterns.get(menu, []):
+    replacements = patterns.get(menu, [])
+    result = user_text
+
+    for pattern, replacement in replacements:
         result = re.sub(pattern, replacement, result)
 
     return result
@@ -114,10 +124,5 @@ async def main() -> None:
     await application.run_polling()
 
 if __name__ == '__main__':
-    loop = asyncio.get_event_loop()
-    try:
-        loop.run_until_complete(main())
-    except RuntimeError as e:
-        print(f"Error: {e}")
-    finally:
-        loop.close()
+    # Use asyncio.run() to manage the event loop
+    asyncio.run(main())
