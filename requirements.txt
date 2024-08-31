@@ -1,1 +1,20 @@
-python-telegram-bot==20.0
+# Telegram bot library
+python-telegram-bot==20.0a2
+
+# Library for loading environment variables
+python-dotenv==1.0.0
+
+# HTTP requests library (optional)
+requests==2.28.2
+
+# Testing framework (optional)
+pytest==7.4.0
+
+# Docker library (optional, for managing Docker from Python)
+docker==6.0.1
+
+# Web framework (optional, if needed for web interactions)
+flask==2.3.2
+
+# Asynchronous HTTP requests (optional, for async requests)
+aiohttp==3.8.1
