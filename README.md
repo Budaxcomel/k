@@ -14,16 +14,12 @@ Start by cloning the repository to your local machine:
 git clone https://github.com/yourusername/telegram-bot-project.git
 cd telegram-bot-project
 
----
-
 ### 2. Set Up Your Virtual Environment
 Create a virtual environment to keep your dependencies organized:
 
 ```
 python -m venv venv
 source venv/bin/activate   # For Windows users: `venv\Scripts\activate`
-
----
 
 ### 3. Install Required Packages
 Install all the necessary packages listed in requirements.txt:
@@ -64,6 +60,8 @@ Build the Docker Image
 
 ```
 docker build -t telegram-bot .
+
+---
 
 Run the Docker Container
 
