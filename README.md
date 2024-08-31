@@ -22,14 +22,14 @@ python -m venv venv
 source venv/bin/activate   # For Windows users: `venv\Scripts\activate`
 
 
-3. Install Required Packages
+## 3. Install Required Packages
 Install all the necessary packages listed in requirements.txt:
 
 ```bash
 pip install -r requirements.txt
 
 
-4. Configure Your Bot
+## 4. Configure Your Bot
 Create a .env file in the project root and add your Telegram bot token:
 
 ```bash
