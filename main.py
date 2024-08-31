@@ -1,7 +1,12 @@
+import sys
+import os
 import asyncio
-from telegram.ext import Application
+from telegram.ext import Application, CommandHandler, CallbackQueryHandler, MessageHandler, filters
 from config import TOKEN
 from handlers import start, button, handle_message
+
+# Menambah direktori semasa ke Python path
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 async def main() -> None:
     application = Application.builder().token(TOKEN).build()
