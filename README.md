@@ -14,7 +14,7 @@ Start by cloning the repository to your local machine:
 git clone https://github.com/yourusername/telegram-bot-project.git
 cd telegram-bot-project
 
-#### 2. Set Up Your Virtual Environment
+# 2. Set Up Your Virtual Environment
 Create a virtual environment to keep your dependencies organized:
 
 ```bash
@@ -29,7 +29,7 @@ Install all the necessary packages listed in requirements.txt:
 pip install -r requirements.txt
 
 
-## 4. Configure Your Bot
+### 4. Configure Your Bot
 Create a .env file in the project root and add your Telegram bot token:
 
 ```bash
