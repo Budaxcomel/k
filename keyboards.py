@@ -11,12 +11,24 @@ SUBMENU_OPTIONS: MenuOptions = {
         [InlineKeyboardButton("Digi X Langgan", callback_data='digi_x_langgan')]
     ],
     'maxis': [
-        [InlineKeyboardButton("my.budaxcomel.me", callback_data='maxis_my')],
-        [InlineKeyboardButton("sg.budaxcomel.me", callback_data='maxis_sg')]
+        [InlineKeyboardButton("Maxis My", callback_data='maxis_my')],
+        [InlineKeyboardButton("Maxis SG", callback_data='maxis_sg')]
     ],
     'booster5': [
         [InlineKeyboardButton("Method 1", callback_data='booster5_method1')],
         [InlineKeyboardButton("Method 2", callback_data='booster5_method2')]
+    ],
+    'umobile': [
+        [InlineKeyboardButton("Umobile Option", callback_data='umobile')]  # Placeholder button
+    ],
+    'unifi': [
+        [InlineKeyboardButton("Unifi Option", callback_data='unifi')]  # Placeholder button
+    ],
+    'celcom': [
+        [InlineKeyboardButton("Celcom Option", callback_data='celcom')]  # Placeholder button
+    ],
+    'yes': [
+        [InlineKeyboardButton("Yes Option", callback_data='yes')]  # Placeholder button
     ]
 }
 
@@ -30,4 +42,9 @@ def get_main_keyboard() -> InlineKeyboardMarkup:
         [InlineKeyboardButton("Yes", callback_data='yes')],
         [InlineKeyboardButton("Booster 5", callback_data='booster5')]
     ]
+    return InlineKeyboardMarkup(keyboard)
+
+def get_submenu_keyboard(menu: str) -> InlineKeyboardMarkup:
+    """Generate submenu keyboard based on the menu option."""
+    keyboard = SUBMENU_OPTIONS.get(menu, [])
     return InlineKeyboardMarkup(keyboard)
