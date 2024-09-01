@@ -15,8 +15,8 @@ async def main() -> None:
     application.add_handler(CommandHandler('start', start))
     application.add_handler(CallbackQueryHandler(button))
     application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
-    application.add_handler(CommandHandler('set_admin_id', set_admin_id, pass_args=True))
-    application.add_handler(CommandHandler('set_user_id', set_user_id, pass_args=True))
+    application.add_handler(CommandHandler('set_admin_id', set_admin_id))
+    application.add_handler(CommandHandler('set_user_id', set_user_id))
 
     try:
         await application.initialize()
