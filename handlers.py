@@ -4,7 +4,7 @@ import json
 from telegram import Update
 from telegram.ext import ContextTypes
 from config import ADMIN_USER_ID, ALLOWED_USER_IDS, PAID_USER_IDS, TOYYIBPAY_API_KEY, TOYYIBPAY_MERCHANT_CODE, TOYYIBPAY_SECRET_KEY
-from clone_bot import PAYING_USERS
+from clone_bot import get_user_data
 from datetime import datetime, timedelta
 import os
 
