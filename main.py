@@ -19,7 +19,20 @@ async def main():
     application.add_handler(CommandHandler('start', start))
 
     # Run the bot until you send a signal to stop
-    await application.run_polling()
+    try:
+        await application.run_polling()
+    except Exception as e:
+        logger.error(f"Error during polling: {e}")
+    finally:
+        # Ensure the application shuts down properly
+        await application.shutdown()
 
 if __name__ == '__main__':
+    # Assuming you have Python 3.7 or later
     asyncio.run(main())
+
+    # For older Python versions (if necessary):
+    # import asyncio
+    # loop = asyncio.get_event_loop()
+    # loop.run_until_complete(main())
+    # loop.close()
