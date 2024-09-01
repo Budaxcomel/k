@@ -5,13 +5,13 @@ from telegram.ext import Application, CommandHandler, CallbackQueryHandler, Mess
 from config import TOKEN, logger
 from handlers import start, button, handle_message, set_admin_id, set_user_id
 
-# Menambah direktori semasa ke Python path
+# Add current directory to Python path
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 async def main() -> None:
     application = Application.builder().token(TOKEN).build()
 
-    # Menambah handler untuk perintah baru
+    # Add handlers for new commands
     application.add_handler(CommandHandler('start', start))
     application.add_handler(CallbackQueryHandler(button))
     application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
