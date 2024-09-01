@@ -44,7 +44,7 @@ async def main() -> None:
     finally:
         try:
             # Graceful shutdown
-            await application.shutdown()
+            await application.stop()
         except Exception as shutdown_error:
             logger.error(f"Error during shutdown: {shutdown_error}")
 
