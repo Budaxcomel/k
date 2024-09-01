@@ -39,11 +39,20 @@ async def main() -> None:
     # Start the bot
     try:
         logger.info("Starting bot...")
-        async with application:
-            await application.initialize()
-            await application.run_polling()
+        await application.initialize()
+        await application.run_polling()
     except Exception as e:
         logger.error(f"An error occurred: {e}")
+    finally:
+        if not application.is_closed:  # Check if application is already closed
+            try:
+                await application.shutdown()
+            except Exception as shutdown_error:
+                logger.error(f"Error during shutdown: {shutdown_error}")
 
 if __name__ == '__main__':
-    asyncio.run(main())
+    loop = asyncio.get_event_loop()
+    try:
+        loop.run_until_complete(main())
+    finally:
+        loop.close()
