@@ -21,7 +21,10 @@ async def main() -> None:
     except Exception as e:
         logger.error(f"Error during polling: {e}")
     finally:
-        await application.shutdown()
+        try:
+            await application.shutdown()
+        except Exception as shutdown_error:
+            logger.error(f"Error during shutdown: {shutdown_error}")
 
 if __name__ == '__main__':
     try:
