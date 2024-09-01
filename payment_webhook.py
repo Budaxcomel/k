@@ -1,15 +1,26 @@
 from flask import Flask, request, jsonify
 import os
-from config import PAID_USER_IDS, TOYYIBPAY_SECRET_KEY
+import hmac
+import hashlib
 import logging
+import json
+from config import PAID_USER_IDS, TOYYIBPAY_SECRET_KEY
 
 app = Flask(__name__)
 logger = logging.getLogger(__name__)
+logging.basicConfig(level=logging.INFO)
+
+def initialize_paid_user_ids_file():
+    """Create or initialize the paid_user_ids.json file."""
+    if not os.path.exists('paid_user_ids.json'):
+        with open('paid_user_ids.json', 'w') as file:
+            json.dump([], file)
+            print("Created paid_user_ids.json with an empty list.")
+
+initialize_paid_user_ids_file()
 
 # Fungsi untuk memeriksa tandatangan (signature) untuk keselamatan
 def verify_signature(params, secret_key):
-    import hmac
-    import hashlib
     signature = params.pop('signature', '')
     payload = '&'.join(f'{key}={value}' for key, value in sorted(params.items()))
     expected_signature = hmac.new(secret_key.encode(), payload.encode(), hashlib.sha256).hexdigest()
@@ -28,11 +39,12 @@ def payment_return():
 
         if payment_status == "paid":
             user_id = int(invoice_no.split('-')[1])
-            PAID_USER_IDS.add(user_id)  # Menambah pengguna ke dalam senarai pengguna berbayar
-            
-            # Simpan kemaskini ke dalam fail atau pangkalan data
-            with open('config.env', 'a') as file:
-                file.write(f'PAID_USER_IDS={",".join(map(str, PAID_USER_IDS))}\n')
+            with open('paid_user_ids.json', 'r+') as file:
+                paid_user_ids = json.load(file)
+                if user_id not in paid_user_ids:
+                    paid_user_ids.append(user_id)
+                    file.seek(0)
+                    json.dump(paid_user_ids, file)
             
             logger.info(f"Payment successful for user_id: {user_id}")
             return jsonify({"status": "success", "message": "Payment successful"}), 200
