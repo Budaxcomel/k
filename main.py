@@ -14,19 +14,12 @@ async def start(update, context):
 async def main():
     # Create the Application and pass it your bot's token
     application = Application.builder().token(TOKEN).build()
-    
+
     # Add handlers
     application.add_handler(CommandHandler('start', start))
 
-    try:
-        # Run the bot until you send a signal to stop
-        await application.run_polling()
-    except Exception as e:
-        logger.error(f"Error during polling: {e}")
-    finally:
-        # Ensure the application shuts down properly
-        await application.shutdown()
+    # Run the bot until you send a signal to stop
+    await application.run_polling()
 
 if __name__ == '__main__':
-    import asyncio
     asyncio.run(main())
