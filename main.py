@@ -44,9 +44,15 @@ async def main() -> None:
     finally:
         try:
             # Graceful shutdown
-            await application.stop()
+            if not application.is_stopped:
+                await application.stop()
         except Exception as shutdown_error:
             logger.error(f"Error during shutdown: {shutdown_error}")
 
 if __name__ == '__main__':
-    asyncio.run(main())
+    try:
+        asyncio.run(main())
+    except RuntimeError as e:
+        logger.error(f"RuntimeError: {e}")
+    except Exception as e:
+        logger.error(f"Unexpected error: {e}")
