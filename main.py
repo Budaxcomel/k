@@ -1,3 +1,4 @@
+import asyncio
 import logging
 from telegram.ext import Application, CommandHandler, MessageHandler, filters
 from config import TOKEN
