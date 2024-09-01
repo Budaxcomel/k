@@ -15,6 +15,7 @@ async def main() -> None:
         logger.error("Telegram bot token is not set in environment variables.")
         return
 
+    # Create the Application object and set up the bot
     application = Application.builder().token(token).build()
 
     # Register command handlers
@@ -47,9 +48,11 @@ async def main() -> None:
     finally:
         # Ensure the application is stopped
         try:
+            # Run this in an asyncio event loop
             await application.stop()
         except Exception as shutdown_error:
             logger.error(f"Error during shutdown: {shutdown_error}")
 
 if __name__ == '__main__':
+    # Use asyncio.run to manage the event loop
     asyncio.run(main())
