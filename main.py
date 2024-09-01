@@ -1,7 +1,6 @@
 import logging
 import os
 import asyncio
-from telegram import Update
 from telegram.ext import Application, CommandHandler, CallbackQueryHandler, MessageHandler, filters
 from handlers import start, button, handle_message, set_admin_id, set_user_id, clone_bot, process_payment, payment_return, broadcast_to_user, broadcast_to_group, broadcast_to_channel, broadcast_to_all, total_users
 
@@ -40,16 +39,11 @@ async def main() -> None:
     # Start the bot
     try:
         logger.info("Starting bot...")
-        await application.initialize()
-        await application.run_polling()
+        async with application:
+            await application.initialize()
+            await application.run_polling()
     except Exception as e:
         logger.error(f"An error occurred: {e}")
-    finally:
-        if not application.is_closed:
-            try:
-                await application.shutdown()
-            except Exception as shutdown_error:
-                logger.error(f"Error during shutdown: {shutdown_error}")
 
 if __name__ == '__main__':
     asyncio.run(main())
