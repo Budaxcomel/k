@@ -1,5 +1,6 @@
-from telegram import InlineKeyboardButton, InlineKeyboardMarkup
+from telebot.types import InlineKeyboardButton, InlineKeyboardMarkup
 from typing import List, Dict
+from text_processing import process_text
 
 # Define type aliases for better readability
 MenuOptions = Dict[str, List[List[InlineKeyboardButton]]]

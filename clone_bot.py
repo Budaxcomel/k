@@ -1,10 +1,9 @@
 import os
 import json
-from typing import List, Dict
-from telegram import Update
-from telegram.ext import ContextTypes
-from config import ALLOWED_USER_IDS, PAID_USER_IDS, TOYYIBPAY_API_KEY, TOYYIBPAY_MERCHANT_CODE, TOYYIBPAY_SECRET_KEY
 import requests
+from typing import Dict
+import telebot
+from config import ALLOWED_USER_IDS, PAID_USER_IDS, TOYYIBPAY_API_KEY, TOYYIBPAY_MERCHANT_CODE, TOYYIBPAY_SECRET_KEY
 
 # Define type alias for the payment status
 PaymentStatus = Dict[str, str]
@@ -30,8 +29,8 @@ def save_user_data(user_data: dict) -> None:
     with open('user_data.json', 'w') as file:
         json.dump(user_data, file, indent=4)
 
-async def clone_bot(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    user_id = update.message.from_user.id
+def clone_bot(message, bot: telebot.TeleBot) -> None:
+    user_id = message.from_user.id
     user_data = get_user_data(user_id)
     
     if is_user_paid(user_id):
@@ -40,14 +39,23 @@ async def clone_bot(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
             # Proceed with cloning the bot
             user_data['bot_count'] = bot_count + 1
             save_user_data({user_id: user_data})
-            await update.message.reply_text("Your bot is being cloned...")
+            bot.reply_to(message, "Your bot is being cloned...")
         else:
-            await update.message.reply_text("You have reached the maximum number of bot clones allowed.")
+            bot.reply_to(message, "You have reached the maximum number of bot clones allowed.")
     else:
         if user_data.get('bot_count', 0) < 1:
             # Proceed with cloning the bot
             user_data['bot_count'] = 1
             save_user_data({user_id: user_data})
-            await update.message.reply_text("Your bot is being cloned...")
+            bot.reply_to(message, "Your bot is being cloned...")
         else:
-            await update.message.reply_text("You have reached the maximum number of bot clones allowed.")
+            bot.reply_to(message, "You have reached the maximum number of bot clones allowed.")
+
+# Example function using requests to fetch additional data
+def fetch_additional_data(api_url: str) -> dict:
+    """Fetch additional data from an external API."""
+    response = requests.get(api_url)
+    if response.status_code == 200:
+        return response.json()
+    else:
+        return {"error": "Failed to fetch data"}

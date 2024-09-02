@@ -1,58 +1,67 @@
 import logging
 import os
-import asyncio
-from telegram.ext import Application, CommandHandler, CallbackQueryHandler, MessageHandler, filters
-from handlers import start, button, handle_message, set_admin_id, set_user_id, clone_bot, process_payment, payment_return, broadcast_to_user, broadcast_to_group, broadcast_to_channel, broadcast_to_all, total_users
+import telebot
+from broadcast import broadcast_to_user, broadcast_to_group, broadcast_to_channel, broadcast_to_all
+from handlers import start, button, handle_message, set_admin_id, set_user_id, clone_bot, process_payment, payment_return, total_users
 
 # Set up logging
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-async def main() -> None:
-    """Start the bot."""
-    token = os.getenv('TELEGRAM_BOT_TOKEN')
-    if not token:
-        logger.error("Telegram bot token is not set in environment variables.")
-        return
+# Get the bot token from environment variables
+TOKEN = os.getenv('TELEGRAM_BOT_TOKEN')
+if not TOKEN:
+    logger.error("Telegram bot token is not set in environment variables.")
+    exit(1)
 
-    # Create the Application object and set up the bot
-    application = Application.builder().token(token).build()
+# Create the bot instance
+bot = telebot.TeleBot(TOKEN)
 
-    # Register command handlers
-    application.add_handler(CommandHandler("start", start))
-    application.add_handler(CommandHandler("set_admin_id", set_admin_id))
-    application.add_handler(CommandHandler("set_user_id", set_user_id))
-    application.add_handler(CommandHandler("clone_bot", clone_bot))
-    application.add_handler(CommandHandler("process_payment", process_payment))
-    application.add_handler(CommandHandler("payment_return", payment_return))
-    application.add_handler(CommandHandler("broadcast_to_user", broadcast_to_user))
-    application.add_handler(CommandHandler("broadcast_to_group", broadcast_to_group))
-    application.add_handler(CommandHandler("broadcast_to_channel", broadcast_to_channel))
-    application.add_handler(CommandHandler("broadcast_to_all", broadcast_to_all))
-    application.add_handler(CommandHandler("total_users", total_users))
+# Command handlers
+@bot.message_handler(commands=['start'])
+def handle_start(message):
+    start(message, bot)
 
-    # Register message handler
-    application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
+@bot.message_handler(commands=['set_admin_id'])
+def handle_set_admin_id(message):
+    set_admin_id(message, bot)
 
-    # Register callback query handler
-    application.add_handler(CallbackQueryHandler(button))
+@bot.message_handler(commands=['set_user_id'])
+def handle_set_user_id(message):
+    set_user_id(message, bot)
 
-    # Start the bot
+@bot.message_handler(commands=['clone_bot'])
+def handle_clone_bot(message):
+    clone_bot(message, bot)
+
+@bot.message_handler(commands=['process_payment'])
+def handle_process_payment(message):
+    process_payment(message, bot)
+
+@bot.message_handler(commands=['payment_return'])
+def handle_payment_return(message):
+    payment_return(message, bot)
+
+@bot.message_handler(commands=['total_users'])
+def handle_total_users(message):
+    total_users(message, bot)
+
+# Message handler
+@bot.message_handler(func=lambda message: not message.text.startswith('/'))
+def handle_text_message(message):
+    handle_message(message, bot)
+
+# Callback query handler
+@bot.callback_query_handler(func=lambda call: True)
+def handle_callback_query(call):
+    button(call, bot)
+
+def main():
     try:
         logger.info("Starting bot...")
-        await application.initialize()
-        await application.start()
-        await application.run_polling()
+        bot.polling()
     except Exception as e:
         logger.error(f"An error occurred: {e}")
-    finally:
-        # Ensure the application is stopped
-        try:
-            # Run this in an asyncio event loop
-            await application.stop()
-        except Exception as shutdown_error:
-            logger.error(f"Error during shutdown: {shutdown_error}")
 
 if __name__ == '__main__':
-    # Use asyncio.run to manage the event loop
-    asyncio.run(main())
+    main()

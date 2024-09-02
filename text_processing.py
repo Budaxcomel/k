@@ -1,5 +1,10 @@
 import re
+import logging
 from typing import Dict, List, Tuple
+
+# Set up logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 # Define type aliases for better readability
 Patterns = Dict[str, List[Tuple[str, str]]]
@@ -62,7 +67,6 @@ def process_text(user_text: str, menu: str) -> str:
         try:
             result = re.sub(pattern, replacement, result)
         except re.error as e:
-            # Log the regex error if necessary
-            print(f"Regex error for pattern '{pattern}': {e}")
+            logger.error(f"Regex error for pattern '{pattern}': {e}")
 
     return result
