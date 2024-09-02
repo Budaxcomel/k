@@ -34,18 +34,20 @@ SUBMENU_OPTIONS: MenuOptions = {
 }
 
 def get_main_keyboard() -> InlineKeyboardMarkup:
+    """Generate the main keyboard with processed button labels."""
     keyboard = [
-        [InlineKeyboardButton("Digi", callback_data='digi')],
-        [InlineKeyboardButton("Maxis", callback_data='maxis')],
-        [InlineKeyboardButton("Umobile", callback_data='umobile')],
-        [InlineKeyboardButton("Unifi", callback_data='unifi')],
-        [InlineKeyboardButton("Celcom", callback_data='celcom')],
-        [InlineKeyboardButton("Yes", callback_data='yes')],
-        [InlineKeyboardButton("Booster 5", callback_data='booster5')]
+        [InlineKeyboardButton(process_text("Digi", 'digi'), callback_data='digi')],
+        [InlineKeyboardButton(process_text("Maxis", 'maxis'), callback_data='maxis')],
+        [InlineKeyboardButton(process_text("Umobile", 'umobile'), callback_data='umobile')],
+        [InlineKeyboardButton(process_text("Unifi", 'unifi'), callback_data='unifi')],
+        [InlineKeyboardButton(process_text("Celcom", 'celcom'), callback_data='celcom')],
+        [InlineKeyboardButton(process_text("Yes", 'yes'), callback_data='yes')],
+        [InlineKeyboardButton(process_text("Booster 5", 'booster5'), callback_data='booster5')]
     ]
     return InlineKeyboardMarkup(keyboard)
 
 def get_submenu_keyboard(menu: str) -> InlineKeyboardMarkup:
-    """Generate submenu keyboard based on the menu option."""
-    keyboard = SUBMENU_OPTIONS.get(menu, [])
+    """Generate submenu keyboard based on the menu option with processed button labels."""
+    submenu = SUBMENU_OPTIONS.get(menu, [])
+    keyboard = [[InlineKeyboardButton(process_text(button.text, menu), callback_data=button.callback_data) for button in row] for row in submenu]
     return InlineKeyboardMarkup(keyboard)
