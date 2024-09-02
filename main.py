@@ -3,6 +3,7 @@ import os
 import telebot
 from broadcast import broadcast_to_user, broadcast_to_group, broadcast_to_channel, broadcast_to_all
 from handlers import start, button, handle_message, set_admin_id, set_user_id, clone_bot, process_payment, payment_return, total_users
+from keyboards import get_main_keyboard, get_submenu_keyboard
 
 # Set up logging
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
@@ -21,6 +22,7 @@ bot = telebot.TeleBot(TOKEN)
 @bot.message_handler(commands=['start'])
 def handle_start(message):
     start(message, bot)
+    bot.send_message(message.chat.id, "Welcome! Choose an option:", reply_markup=get_main_keyboard())
 
 @bot.message_handler(commands=['set_admin_id'])
 def handle_set_admin_id(message):
@@ -53,8 +55,12 @@ def handle_text_message(message):
 
 # Callback query handler
 @bot.callback_query_handler(func=lambda call: True)
-def handle_callback_query(call):
-    button(call, bot)
+def handle_query(call):
+    menu = call.data
+    if menu in SUBMENU_OPTIONS:
+        bot.send_message(call.message.chat.id, "Choose an option:", reply_markup=get_submenu_keyboard(menu))
+    else:
+        bot.send_message(call.message.chat.id, "Invalid option selected.")
 
 def main():
     try:

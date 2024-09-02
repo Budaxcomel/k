@@ -6,6 +6,7 @@ import os
 import telebot
 from config import ADMIN_USER_ID, ALLOWED_USER_IDS, PAID_USER_IDS, TOYYIBPAY_API_KEY, TOYYIBPAY_MERCHANT_CODE, TOYYIBPAY_SECRET_KEY
 from clone_bot import get_user_data
+from keyboards import get_main_keyboard
 
 logger = logging.getLogger(__name__)
 
@@ -32,7 +33,7 @@ def save_user_data(user_data: dict) -> None:
 
 def start(message: telebot.types.Message, bot: telebot.TeleBot) -> None:
     """Handle /start command."""
-    bot.reply_to(message, "Welcome!")
+    bot.reply_to(message, "Welcome! Choose an option:", reply_markup=get_main_keyboard())
 
 def button(call: telebot.types.CallbackQuery, bot: telebot.TeleBot) -> None:
     """Handle callback queries from inline buttons."""
