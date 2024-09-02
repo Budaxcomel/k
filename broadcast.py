@@ -2,7 +2,7 @@ import json
 import os
 import telebot
 from typing import List
-from config import TOKEN
+from config import TOKEN as TELEGRAM_BOT_TOKEN
 
 # Load configuration from environment variables or a config file
 API_TOKEN = TELEGRAM_BOT_TOKEN  # Directly use imported token
