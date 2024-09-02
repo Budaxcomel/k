@@ -20,9 +20,7 @@ bot = telebot.TeleBot(TOKEN)
 
 # Command handlers
 @bot.message_handler(commands=['start'])
-def handle_start(message):
-    start(message, bot)
-    bot.send_message(message.chat.id, "Welcome! Choose an option:", reply_markup=get_main_keyboard())
+def handle_start(message)
 
 @bot.message_handler(commands=['set_admin_id'])
 def handle_set_admin_id(message):
@@ -48,19 +46,19 @@ def handle_payment_return(message):
 def handle_total_users(message):
     total_users(message, bot)
 
+@bot.message_handler(commands=['broadcast_user'])
+def broadcast_to_user(message: telebot.types.Message)
+
+@bot.message_handler(commands=['broadcast_group'])
+def broadcast_to_group(message: telebot.types.Message)
+
+@bot.message_handler(commands=['broadcast_channel'])
+def broadcast_to_channel(message: telebot.types.Message)
+
 # Message handler
 @bot.message_handler(func=lambda message: not message.text.startswith('/'))
 def handle_text_message(message):
     handle_message(message, bot)
-
-# Callback query handler
-@bot.callback_query_handler(func=lambda call: True)
-def handle_query(call):
-    menu = call.data
-    if menu in SUBMENU_OPTIONS:
-        bot.send_message(call.message.chat.id, "Choose an option:", reply_markup=get_submenu_keyboard(menu))
-    else:
-        bot.send_message(call.message.chat.id, "Invalid option selected.")
 
 def main():
     try:
